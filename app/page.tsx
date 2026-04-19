@@ -1,65 +1,163 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+const inputStyle = {
+  width: '100%',
+  padding: '10px 12px',
+  border: '1px solid #4b5563',
+  borderRadius: '4px',
+  boxSizing: 'border-box' as const,
+  backgroundColor: '#fff'
+};
+
+const buttonStyle = {
+  padding: '10px 20px',
+  background: '#dfeedd',
+  border: '1px solid #bdd4bd',
+  borderRadius: '4px',
+  cursor: 'pointer'
+};
 
 export default function Home() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!res.ok) {
+        setError('Invalid credentials');
+        return;
+      }
+
+      const user = await res.json();
+      localStorage.setItem('user', JSON.stringify(user));
+      router.push('/dashboard');
+    } catch {
+      setError('Unable to reach the login service');
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div style={{ padding: 'clamp(16px, 4vw, 24px)' }}>
+      <div
+        style={{
+          maxWidth: '980px',
+          margin: '0 auto',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '24px',
+          alignItems: 'flex-start'
+        }}
+      >
+        <div style={{ flex: '1 1 420px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          <div>
+            <h1 style={{ margin: '0 0 8px 0' }}>Crop Field Monitoring</h1>
+            <p style={{ margin: 0, color: '#4b5563' }}>
+              Simple seasonal field tracking focused on meeting the assessment objectives clearly.
+            </p>
+          </div>
+
+          <div
+            style={{
+              padding: '16px 18px',
+              border: '1px solid #cfe0cf',
+              borderRadius: '8px',
+              background: '#e9f4e9',
+              lineHeight: 1.6
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <p style={{ margin: 0, fontWeight: 600 }}>Project Note</p>
+            <p style={{ margin: '10px 0 0 0' }}>
+              This implementation was intentionally kept simple. The focus was placed on usable flows,
+              working business logic, PostgreSQL as the relational database, and Next.js for the application structure.
+            </p>
+            <p style={{ margin: '10px 0 0 0' }}>
+              Complex styling was not the priority for this submission.
+            </p>
+            <p style={{ margin: '10px 0 0 0' }}>
+              Developed by <strong>Ogres Murathimi</strong> (<strong>Full Stack Developer</strong>).
+            </p>
+          </div>
+
+          <div
+            style={{
+              padding: '16px 18px',
+              border: '1px solid #cfe0cf',
+              borderRadius: '8px',
+              background: '#f5fbf5'
+            }}
           >
-            Documentation
-          </a>
+            <p style={{ margin: 0, fontWeight: 600 }}>Demo Users</p>
+            <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
+              <p style={{ margin: 0 }}><strong>Admin:</strong> admin@example.com / admin123</p>
+              <p style={{ margin: 0 }}><strong>Agent:</strong> agent@example.com / agent123</p>
+              <p style={{ margin: 0 }}><strong>Agent 1:</strong> agent1@example.com / agent123</p>
+              <p style={{ margin: 0 }}><strong>Agent 2:</strong> agent2@example.com / agent123</p>
+              <p style={{ margin: 0 }}><strong>Agent 3:</strong> agent3@example.com / agent123</p>
+            </div>
+          </div>
         </div>
-      </main>
+
+        <div style={{ flex: '1 1 340px', minWidth: 0 }}>
+          <div
+            style={{
+              padding: '20px',
+              border: '1px solid #cfe0cf',
+              borderRadius: '8px',
+              background: '#f7fcf7',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px'
+            }}
+          >
+            <div>
+              <h2 style={{ margin: '0 0 6px 0' }}>Login</h2>
+              <p style={{ margin: 0, color: '#4b5563', fontSize: '14px' }}>
+                Sign in as an admin or field agent to continue.
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label>Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  style={inputStyle}
+                />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  style={inputStyle}
+                />
+              </div>
+              <button type="submit" style={buttonStyle}>Login</button>
+            </form>
+
+            {error && <p style={{ color: 'red', margin: 0 }}>{error}</p>}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
