@@ -279,30 +279,64 @@ export default function Dashboard() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: 16
+              padding: 16,
+              zIndex: 1000
             }}
           >
-            <div style={{ background: '#f7fcf7', padding: 24, borderRadius: 8, width: 'min(100%, 420px)', border: '1px solid #cfe0cf' }}>
-              <h3 style={{ marginTop: 0 }}>Update Field: {updateField.name}</h3>
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ display: 'block', marginBottom: 4 }}>Stage</label>
-                <select value={newStage} onChange={e => setNewStage(e.target.value)} style={{ width: '100%', padding: 10 }}>
-                  <option value="Planted">Planted</option>
-                  <option value="Growing">Growing</option>
-                  <option value="Ready">Ready</option>
-                  <option value="Harvested">Harvested</option>
-                </select>
+            <div style={{ background: '#f7fcf7', padding: 24, borderRadius: 8, width: 'min(100%, 420px)', border: '1px solid #cfe0cf', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+              <h3 style={{ marginTop: 0, marginBottom: 16 }}>Update Field Stage</h3>
+              
+              <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #e5e7eb', marginBottom: 16 }}>
+                <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 4 }}>{updateField.name}</div>
+                <div style={{ fontSize: 13, color: '#6b7280' }}>{updateField.crop_type}</div>
+                <div style={{ fontSize: 12, color: '#6b7280', marginTop: 4 }}>
+                  Planted: {updateField.planting_date ? new Date(updateField.planting_date).toLocaleDateString() : 'Not set'}
+                </div>
               </div>
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ display: 'block', marginBottom: 4 }}>Notes</label>
-                <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: 10, minHeight: 80 }} />
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, justifyContent: 'center' }}>
+                <div style={{ flex: 1, padding: '10px 14px', borderRadius: 6, background: '#e5e7eb', textAlign: 'center' }}>
+                  <div style={{ fontSize: 10, color: '#6b7280', textTransform: 'uppercase', marginBottom: 2 }}>Current</div>
+                  <div style={{ fontWeight: 600, color: '#374151' }}>{updateField.current_stage || 'Not set'}</div>
+                </div>
+                <div style={{ color: '#9ca3af', fontSize: 20 }}>→</div>
+                <div style={{ flex: 1, padding: '10px 14px', borderRadius: 6, background: '#dfeedd', textAlign: 'center', border: '2px solid #22c55e' }}>
+                  <div style={{ fontSize: 10, color: '#15803d', textTransform: 'uppercase', marginBottom: 2 }}>New</div>
+                  <select 
+                    value={newStage} 
+                    onChange={e => setNewStage(e.target.value)} 
+                    style={{ fontWeight: 600, color: '#15803d', background: 'transparent', border: 'none', textAlign: 'center', width: '100%', cursor: 'pointer' }}
+                  >
+                    <option value="Planted">Planted</option>
+                    <option value="Growing">Growing</option>
+                    <option value="Ready">Ready</option>
+                    <option value="Harvested">Harvested</option>
+                  </select>
+                </div>
               </div>
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Notes (optional)</label>
+                <textarea 
+                  value={notes} 
+                  onChange={e => setNotes(e.target.value)} 
+                  placeholder="Add notes about this update..."
+                  style={{ width: '100%', padding: 10, minHeight: 80, borderRadius: 6, border: '1px solid #d1d5db' }} 
+                />
+              </div>
+              
               <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
-                <button onClick={() => setUpdateField(null)} style={{ padding: '8px 16px', cursor: 'pointer', background: '#edf6ed', border: '1px solid #c8dac8', borderRadius: 4 }}>
+                <button 
+                  onClick={() => { setUpdateField(null); setNotes(''); }} 
+                  style={{ padding: '10px 18px', cursor: 'pointer', background: '#f3f4f6', border: '1px solid #d1d5db', borderRadius: 6 }}
+                >
                   Cancel
                 </button>
-                <button onClick={submitUpdate} style={{ padding: '8px 16px', cursor: 'pointer', background: '#dfeedd', border: '1px solid #bdd4bd', borderRadius: 4 }}>
-                  Save
+                <button 
+                  onClick={submitUpdate} 
+                  style={{ padding: '10px 18px', cursor: 'pointer', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 500 }}
+                >
+                  Save Update
                 </button>
               </div>
             </div>
