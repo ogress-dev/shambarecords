@@ -112,15 +112,15 @@ The dashboard checks for this on load and redirects to login if not present.
 
 3. Configure environment variables in `.env.local`:
    ```env
-   # Either use DATABASE_URL
-   DATABASE_URL=postgresql://user:password@localhost:5432/crop_monitoring
+   # Neon connection string (from Neon dashboard)
+   DATABASE_URL=postgresql://user:password@host.neon.tech/dbname?sslmode=require
    
-   # Or configure individually
-   PGHOST=localhost
+   # Or configure individually (for Neon)
+   PGHOST=your-host.neon.tech
    PGPORT=5432
-   PGUSER=postgres
-   PGPASSWORD=your_password
-   PGDATABASE=crop_monitoring
+   PGUSER=your-username
+   PGPASSWORD=your-password
+   PGDATABASE=your-database-name
    ```
 
 4. Start the development server:
@@ -136,5 +136,5 @@ The database tables and demo users are created automatically on first connection
 
 - **Frontend**: Next.js 16 (App Router), React
 - **Backend**: Next.js Route Handlers
-- **Database**: PostgreSQL with `pg` library
+- **Database**: PostgreSQL (hosted on Neon) with `pg` library
 - **Styling**: Inline CSS (kept minimal for clarity)
